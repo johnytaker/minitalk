@@ -6,7 +6,7 @@
 /*   By: iugolin <iugolin@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 14:36:12 by iugolin           #+#    #+#             */
-/*   Updated: 2022/01/22 08:26:05 by iugolin          ###   ########.fr       */
+/*   Updated: 2022/01/22 09:20:16 by iugolin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,8 @@ static void	string_delivery(char *str, pid_t pid)
 	while (str_len >= i)
 	{
 		bitnum = 8;
-		while (bitnum != 0)
+		while (bitnum--)
 		{
-			bitnum--;
 			if (((unsigned char)str[i] >> bitnum & 1) == 1)
 				kill(pid, SIGUSR1);
 			else if (((unsigned char)str[i] >> bitnum & 1) == 0)
