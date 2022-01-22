@@ -6,49 +6,57 @@
 /*   By: iugolin <iugolin@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 12:33:06 by iugolin           #+#    #+#             */
-/*   Updated: 2022/01/21 16:03:12 by iugolin          ###   ########.fr       */
+/*   Updated: 2022/01/22 08:23:38 by iugolin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <signal.h>
+#include "includes/minitalk.h"
 
-void	ft_putchar(char c)
+void	print_pid(void)
 {
-	write(1, &c, 1);
+	ft_putendl_fd("\n¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯", 1);
+	ft_putstr_fd("Succefully started 'Minitalk server'\nProcess ID: ", 1);
+	ft_putnbr_fd(getpid(), 1);
+	ft_putendl_fd("\n____________________________________", 1);
 }
 
-void	ft_putnbr(int n)
+static void	signal_handler(int signum, siginfo_t *s_act, void *old)
 {
-	unsigned int	num;
+	static unsigned char	c;
+	static size_t	size;
 
-	if (n < 0)
+	(void)old;
+	if (signum == SIGUSR1)
+		signum = 1;
+	else if (signum == SIGUSR2)
+		signum = 0;
+	if (c == 0 && size == 0)
+		size = 8;
+	size--;
+	c += (signum & 1) << size;
+	if (size == 0)
 	{
-		ft_putchar('-');
-		num = -n;
+		if (!c)
+		{
+			ft_putchar_fd('\n', 1);
+			kill(s_act->si_pid, SIGUSR1);
+		}
+		ft_putchar_fd(c, 1);
+		c = 0;
+		size = 8;
 	}
-	else
-		num = n;
-	if (num / 10)
-		ft_putnbr(num / 10);
-	ft_putchar((num % 10) + '0');
 }
 
-void	sigact_handler(int signum, siginfo_t *sa, void *old)
+int	main(void)
 {
+	struct sigaction	s_act;
 
-}
-
-int	main(int argc, char **argv)
-{
-	struct sigaction	sa;
-
-	sa.sa_flags = SA_SIGINFO;
-	sa.sa_sigaction = sigact_handler;
-	sigaction(SIGUSR1, &sa, NULL);
-	sigaction(SIGUSR2, &sa, NULL);
-	ft_putnbr(getpid());
-
-
-
+	print_pid();
+	s_act.sa_sigaction = signal_handler;
+	s_act.sa_flags = SA_SIGINFO;
+	sigaction(SIGUSR1, &s_act, NULL);
+	sigaction(SIGUSR2, &s_act, NULL);
+	while (1)
+		pause();
+	return (0);
 }
