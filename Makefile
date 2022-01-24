@@ -6,7 +6,7 @@
 #    By: iugolin <iugolin@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 18:09:12 by iugolin           #+#    #+#              #
-#    Updated: 2022/01/22 17:16:32 by iugolin          ###   ########.fr        #
+#    Updated: 2022/01/23 12:17:20 by iugolin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ LIBFT = ./libft/libft.a
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 HEADER = ./includes/minitalk.h
-RM = @rm -f
+RM = rm -f
 
 NAME:	$(SERVER) $(CLIENT)
 
