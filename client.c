@@ -6,7 +6,7 @@
 /*   By: iugolin <iugolin@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 14:36:12 by iugolin           #+#    #+#             */
-/*   Updated: 2022/01/22 09:20:16 by iugolin          ###   ########.fr       */
+/*   Updated: 2022/01/24 19:39:19 by iugolin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ static void	string_delivery(char *str, pid_t pid)
 		bitnum = 8;
 		while (bitnum--)
 		{
-			if (((unsigned char)str[i] >> bitnum & 1) == 1)
+			if ((str[i] >> bitnum) & 0x01)
 				kill(pid, SIGUSR1);
-			else if (((unsigned char)str[i] >> bitnum & 1) == 0)
+			else
 				kill(pid, SIGUSR2);
-			usleep(100);
+			usleep(160);
 		}
 		i++;
 	}
@@ -68,11 +68,6 @@ int	main(int argc, char **argv)
 	// 		exit(EXIT_FAILURE);
 	// 	}
 	signal(SIGUSR1, ft_handler);
-	signal(SIGUSR2, ft_handler);
 	string_delivery(argv[2], ft_atoi(argv[1]));
-	while (1)
-	{
-		pause();
-	}
 	return (0);
 }
