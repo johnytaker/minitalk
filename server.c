@@ -6,7 +6,7 @@
 /*   By: iugolin <iugolin@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 12:33:06 by iugolin           #+#    #+#             */
-/*   Updated: 2022/01/24 18:50:17 by iugolin          ###   ########.fr       */
+/*   Updated: 2022/01/25 19:44:47 by iugolin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,25 @@ void	print_pid(void)
 static void	signal_handler(int signum, siginfo_t *s_act, void *old)
 {
 	static unsigned char	c;
-	static size_t	size;
+	static size_t			size = 8;
 
 	(void)old;
 	if (signum == SIGUSR1)
 		signum = 1;
 	else if (signum == SIGUSR2)
 		signum = 0;
-	if (c == 0 && size == 0)
-		size = 8;
+	// if (c == 0 && size == 0)
+	// 	size = 8;
 	size--;
-	c += (signum & 1) << size;
+	c |= (signum & 1) << size;
 	if (size == 0)
 	{
 		if (!c)
 		{
-			ft_putchar_fd('\n', 1);
+			write(1, "\n", 1);
 			kill(s_act->si_pid, SIGUSR1);
 		}
-		ft_putchar_fd(c, 1);
+		write(1, &c, 1);
 		c = 0;
 		size = 8;
 	}

@@ -6,7 +6,7 @@
 /*   By: iugolin <iugolin@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 14:36:12 by iugolin           #+#    #+#             */
-/*   Updated: 2022/01/24 19:39:19 by iugolin          ###   ########.fr       */
+/*   Updated: 2022/01/25 16:59:42 by iugolin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@ int	main(int argc, char **argv)
 	ft_putstr_fd("Sending data to : ", 1);
 	ft_putstr_fd(argv[1], 1);
 	ft_putendl_fd("..", 1);
-	// if (signal(SIGUSR1, ft_handler) == -1 || signal(SIGUSR2, ft_handler) == -1)
-	// 	{
-	// 		ft_putendl_fd("An error has occurred", 1);
-	// 		exit(EXIT_FAILURE);
-	// 	}
-	signal(SIGUSR1, ft_handler);
+	if (signal(SIGUSR1, ft_handler) < 0)
+		{
+			ft_putendl_fd("An error has occurred", 1);
+			exit(EXIT_FAILURE);
+		}
+	// signal(SIGUSR1, ft_handler);
 	string_delivery(argv[2], ft_atoi(argv[1]));
 	return (0);
 }
