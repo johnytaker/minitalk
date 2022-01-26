@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iugolin <iugolin@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/21 12:33:06 by iugolin           #+#    #+#             */
-/*   Updated: 2022/01/26 19:54:33 by iugolin          ###   ########.fr       */
+/*   Updated: 2022/01/26 19:49:35 by iugolin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static void	ft_error_handler(void)
 {
 	ft_putendl_fd("Signal error", 1);
 	exit(EXIT_FAILURE);
-}
 
 static void	signal_handler(int signum, siginfo_t *s_act, void *old)
 {
@@ -44,16 +43,12 @@ static void	signal_handler(int signum, siginfo_t *s_act, void *old)
 		c |= 0x01 << size;
 	if (size == 0)
 	{
-		if (!c)
-		{
-			write(1, "\n", 1);
-			if (kill(pid, SIGUSR2) == -1)
-				ft_error_handler();
-		}
 		write(1, &c, 1);
 		c = 0;
 		size = 8;
 	}
+	if (kill(pid, SIGUSR2) == -1)
+		ft_error_handler();
 }
 
 int	main(void)
@@ -61,8 +56,8 @@ int	main(void)
 	struct sigaction	s_act;
 
 	print_pid();
-	s_act.sa_flags = SA_SIGINFO;
 	s_act.sa_sigaction = signal_handler;
+	s_act.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &s_act, NULL);
 	sigaction(SIGUSR2, &s_act, NULL);
 	while (1)

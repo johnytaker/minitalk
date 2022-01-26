@@ -6,51 +6,55 @@
 #    By: iugolin <iugolin@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 18:09:12 by iugolin           #+#    #+#              #
-#    Updated: 2022/01/24 19:39:33 by iugolin          ###   ########.fr        #
+#    Updated: 2022/01/26 16:22:07 by iugolin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CLIENT = client
 SERVER = server
-NAME = $(SERVER) $(CLIENT)
+CLIENT = client
+NAME = minitalk
 SRC_SERVER = server.c
 SRC_CLIENT = client.c
 OBJ_SERVER = $(SRC_SERVER:.c=.o)
 OBJ_CLIENT = $(SRC_CLIENT:.c=.o)
-LIBFT_HEADER = ./libft/libft.h
+SRC_SERVER_B = server_bonus.c
+SRC_CLIENT_B = client_bonus.c
+OBJ_SERVER_B = $(SRC_SERVER_B:.c=.o)
+OBJ_CLIENT_B = $(SRC_CLIENT_B:.c=.o)
 LIBFT = ./libft/libft.a
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 HEADER = ./includes/minitalk.h
 RM = rm -f
 
-NAME:	$(SERVER) $(CLIENT)
+$(NAME):	lib server client
 
 all:	$(NAME)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(HEADER)
+%.o: %.c $(HEADER) $(LIBFT)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(LIBFT):	$(LIBFT_HEADER)
-		make -C libft
+lib:
+	make -C libft
 
-server:	$(LIBFT) $(OBJ_SERVER) $(HEADER)
+server:	$(OBJ_SERVER)
 			$(CC) $(CFLAGS) $(OBJ_SERVER) $(LIBFT) -o $(SERVER)
 
-client:	$(LIBFT) $(OBJ_CLIENT) $(HEADER)
+client:	$(OBJ_CLIENT)
 			$(CC) $(CFLAGS) $(OBJ_CLIENT) $(LIBFT) -o $(CLIENT)
 
-bonus: all
+bonus:
+	make "OBJ_SERVER=$(OBJ_SERVER_B)" "OBJ_CLIENT=$(OBJ_CLIENT_B)" all
 
 clean:
-		$(RM) $(OBJ_SERVER) $(OBJ_CLIENT)
+		$(RM) $(OBJ_SERVER) $(OBJ_CLIENT) $(OBJ_SERVER_B) $(OBJ_CLIENT_B)
 		make clean -C libft
 
 fclean:	clean
-		$(RM) $(NAME)
+		$(RM) $(SERVER) $(CLIENT)
 		make fclean -C libft
 
-re:		fclean all
+re:	fclean all
 
 .PHONY:	all clean fclean re bonus
 

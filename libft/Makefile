@@ -54,17 +54,11 @@ OBJS_BONUS = $(SRCS_B:.c=.o)
 
 all: $(NAME)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(HEADER)
+%.o: %.c $(HEADER)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# $(NAME): $(OBJS)
-# 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
-
-$(NAME): $(OBJS) $(HEADER)
-	ar -rcs $@ $^
-
-# bonus: $(OBJS_BONUS) $(HEADER)
-# 	ar -rcs $(NAME) $^
+$(NAME): $(OBJS)
+	ar -rcs $@ $?
 
 bonus:
 	make "OBJS=$(OBJS_BONUS)" all
