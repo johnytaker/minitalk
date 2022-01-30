@@ -6,7 +6,7 @@
 #    By: iugolin <iugolin@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/21 18:09:12 by iugolin           #+#    #+#              #
-#    Updated: 2022/01/26 16:22:07 by iugolin          ###   ########.fr        #
+#    Updated: 2022/01/27 11:58:35 by iugolin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,16 +31,16 @@ $(NAME):	lib server client
 
 all:	$(NAME)
 
-%.o: %.c $(HEADER) $(LIBFT)
+%.o: %.c $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 lib:
 	make -C libft
 
-server:	$(OBJ_SERVER)
+server:	$(OBJ_SERVER) $(LIBFT)
 			$(CC) $(CFLAGS) $(OBJ_SERVER) $(LIBFT) -o $(SERVER)
 
-client:	$(OBJ_CLIENT)
+client:	$(OBJ_CLIENT) $(LIBFT)
 			$(CC) $(CFLAGS) $(OBJ_CLIENT) $(LIBFT) -o $(CLIENT)
 
 bonus:
